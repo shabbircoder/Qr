@@ -1,20 +1,14 @@
 import React from 'react'
-import logo from "../../assets/qr.png"
+import logo from "../../assets/icon.png"
 
 function Navbar() {
     return (
-        <div className='main px-4  py-4 shadow-md flex justify-center'>
-            {/* main content  */}
-            <div className="">
-                {/* react image  */}
-                <div className="flex justify-center mb-2">
-                    <img className='w-28' src={logo}
-                        alt="img" />
-                </div>
-
-                {/* heading  */}
-                <div className="heading">
-                    <span className='text-2xl  text-white font-bold'> QR Code Generator</span>
+        <div
+            className='main lg:flex md:flex flex-wrap justify-between items-center px-4 bg-[#2f3640] py-4'>
+            <div className="left">
+                <div className="logo font-bold text-2xl text-white text-center">
+                    {/* <img className=' w-44' src={logo} alt="" /> */}
+                    <h1 className=" text-4xl font-bolder  "  > V I S U A L </h1>
                 </div>
             </div>
         </div>

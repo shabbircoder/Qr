@@ -1,77 +1,99 @@
-import React, { useState } from 'react'
-import Navbar from "./component/navbar/Navbar"
+import React, { useCallback, useState } from 'react'
+import Navbar from './component/navbar/Navbar'
+import Result from './component/result/result'
+import CodeMirror from "@uiw/react-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
+import { html } from "@codemirror/lang-html";
+import { css } from "@codemirror/lang-css";
+
 
 export default function App() {
+  // create use State 
+  const [html_edit , setHtml_edit] = useState("")
+  const [css_edit , setCss_edit] = useState("")
+  const [js_edit , setJs_edit] = useState("")
 
-  const [inputValue , setInputValue] = useState("")
-  const [qr , setQr ] = useState("") 
+  // html onchange Handler 
+  const onChangeHtml = useCallback((value) => {
+    setHtml_edit(value)
+  }, [])
 
-  const createQr = () => {
-    if(!inputValue){
-      return alert("Your content is empty. Input something")
-    }
-    setQr(`http://api.qrserver.com/v1/create-qr-code/?data=${inputValue}&size=[200]x[200]`)
-  }
+  // css onchange Handler 
+  const onChangeCss = useCallback((value) => {
+    setCss_edit(value)
+    
+  }, [])
 
+  // js onchange Handler 
+  const onChangeJs = useCallback((value) => {
+    setJs_edit(value)
+  }, [])
+
+  // create html document 
+  const srcCode = `
+  <html>
+  <body> ${html_edit} </body>
+  <style> ${css_edit} </style>
+  <script> ${js_edit} </script>
+  </html>
+  ` ;
 
   return (
     <div>
-      <Navbar ></Navbar>
-      {/* Main Content  */}
-      <div className=" container mx-auto">
-        {/* Top content */}
-        <div className="">
-          {/* Qr code title  */}
-          <h1 className='text-center text-white text-4xl mt-6 mb-2 font-bold'>
-            QR Code Generator
-          </h1>
-
-          {/* paragraph  */}
-          <p className='text-center text-white text-xl mb-3'>An instant creation of a QR code with any content.
-          </p>
-        </div>
-
-        {/* Search Input And Button  */}
-        <div className="flex justify-center">
-          <div className="input flex justify-center mt-5 mb-7 px-5 lg:px-0">
-            {/* Search Input  */}
-            <input
-            value={inputValue}
-            onChange={(e)=>setInputValue(e.target.value)}
-              type="text"
-              placeholder='Write the content (link or text)'
-              className=' shadow-md text-white bg-[#2f3542] placeholder-gray-400 
-              rounded-l-lg px-2 py-2 w-64 lg:w-[30em] outline-none border-2 border-gray-600'
+      <Navbar />
+            {/* main content  */}
+            <div className=" p-2">
+        {/* Editor  */}
+         {/* <div className=' font-size-[20px] ' > HTML</div> */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+         {/* Html Editor */}
+          <div className="bg-[#282c34] p-4 rounded-lg shadow">
+            <h2 className="text-lg font-semibold mb-2 text-white">
+              HTML
+            <CodeMirror
+              className="text-xl border-gray-700 border"
+              value={html_edit}
+              height="342px"
+              theme="dark"
+              extensions={[html(true)]}
+              onChange={onChangeHtml}
             />
-
-            {/* Button  */}
-            <button
-            onClick={createQr}
-              className='bg-[#222f3e] px-4 rounded-r-lg text-white 
-              shadow-md border-b-2 border-r-2 border-t-2 border-gray-600 '>
-              Create
-            </button>
+              </h2>
           </div>
-        </div>
+          {/* Css Editor  */}
+          <div className="bg-[#282c34] p-4 rounded-lg shadow">
+            <h2 className="text-lg font-semibold mb-2 text-white">
+              CSS
+            <CodeMirror
+              className="text-xl border-gray-700 border"
+              value={css_edit}
+              height="342px"
+              theme="dark"
+              extensions={[css(true)]}
+              onChange={onChangeCss}
+            />
+              </h2>
+          </div>
+          {/* JavaScript Editor  */}
+          <div className="bg-[#282c34] p-4 rounded-lg shadow">
+            <h2 className="text-lg font-semibold mb-2 text-white">
+              JAVASCRIPT 
+            <CodeMirror
+              className="text-xl border-gray-700 border"
+              value={js_edit}
+              height="342px"
+              theme="dark"
+              extensions={[javascript(true)]}
+              onChange={onChangeJs}
+            />
+            </h2>
+          </div>
+          </div>
+<Result 
+srcCode={srcCode}
+/>
+          </div>
 
-        {/* Title And QR Code Image */}
-        {qr && 
-             <div className='qr-container'>
-             {/* title  */}
-             <h2 className="qr-title text-center text-2xl text-white font-semibold mb-5">
-               Here is your QR!
-             </h2>
-   
-             {/* anchor tag and img tag  */}
-             <a className=' flex justify-center mb-4    '>
-               <img className='qr-image' src={qr} alt="QR code" />
-             </a>
-           </div>
-        }
-
-
-   
-      </div>
     </div>
   )
 }
